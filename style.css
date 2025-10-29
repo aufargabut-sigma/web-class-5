@@ -1,0 +1,109 @@
+
+body::before {
+  content: "";
+  background: url('background.png') no-repeat center center fixed;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: blur(7px) brightness(70%);
+}
+
+
+
+
+h1 {
+  color: rgb(255, 255, 255); /* warna teks kamu */
+  text-shadow: 2px 2px 4px black; /* bayangan hitam di belakang teks */
+}
+
+h2 {
+  color: rgb(255, 255, 255); /* warna teks kamu */
+  text-shadow: 2px 2px 4px black; /* bayangan hitam di belakang teks */
+}
+
+
+li {
+  color: rgb(255, 255, 255); /* warna teks kamu */
+  text-shadow: 2px 2px 4px black; /* bayangan hitam di belakang teks */
+}
+
+
+  h2 {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 80%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #0453b3;
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    caption {
+      caption-side: top;
+      font-weight: bold;
+      font-size: 22px;
+      padding: 10px;
+      color: white;
+    }
+
+
+
+
+
+    button {
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  border: none;
+  padding: 12px 20px;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+.konten {
+  display: none;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+#menuUtama {
+  display: block;
+}
+#tentang {
+  color: white;
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+  line-height: 1.6;
+}

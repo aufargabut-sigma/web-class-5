@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas 5 - SDN Cibodas</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #d4dbe3, #0080ff); /* Gradien biru dari file kedua */
+            color: white;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+
+        /* --- Gaya Utama Konten (dari file pertama) --- */
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        table {
+            width: 90%;
+            max-width: 800px; /* Batasi lebar agar responsif */
+            margin: 20px auto; /* Tambahkan margin atas/bawah */
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            color: #333; /* Tambahkan warna teks untuk tabel */
+        }
+
+        th {
+            background-color: #0072ff;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        caption {
+            caption-side: top;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Efek muncul (untuk .reveal) */
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* BONUS: animasi baris muncul satu-satu */
+        tr {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        tr.show-row {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        img {
+            width: 45px;
+            height: 45px;
+            border-radius: 9%;
+            object-fit: cover;
+            box-shadow: 0 0 3px rgba(0,0,0,0.2);
+            vertical-align: middle;
+        }
+        
+        /* --- Gaya Menu Tab (dari file kedua) --- */
+        .menu {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .menu button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu button:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .konten {
+            display: none;
+            padding: 20px 0; /* Padding vertikal */
+            animation: fadeIn 0.5s ease;
+            min-height: 50vh; /* Agar ada ruang untuk scroll */
+        }
+
+        .aktif {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: scale(0.98);}
+            to {opacity: 1; transform: scale(1);}
+        }
+
+        .galeri {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .galeri img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+    </style>
+<style>/* --- POPUP FOTO BESAR --- */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+}
+
+.popup img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* biar foto tetap proporsional dan tidak kepotong */
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.popup.active {
+  display: flex;
+  animation: zoomIn 0.3s ease;
+}
+
+/* animasi muncul */
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+</style>
+    
+</head>
+<body>
+  
+
+    <center>
+        <h1 class="reveal">WELCOME TO CLASS FIVE</h1>
+        <h2 class="reveal">SDN CIBODAS</h2>
+    </center>
+
+    <div class="menu">
+        <button onclick="buka('data-siswa')" id="defaultOpen">📊 Data Siswa</button>
+        <button onclick="buka('jadwal')">📅 Jadwal Pelajaran</button>
+        <button onclick="buka('struktur')">👑 Struktur Organisasi</button>
+        <button onclick="buka('permainan')">🎮 Permainan</button>
+        <button onclick="buka('foto')">📸 Foto</button>
+        <button onclick="buka('tentang-kami')">ℹ Tentang Kami</button>
+    </div>
+
+    <div id="data-siswa" class="konten aktif">
+        <table class="reveal">
+            <caption>Data Siswa</caption>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Jenis Kelamin</th>
+                <th>Umur</th>
+                <th>Alamat</th>
+            </tr>
+  <tr><td>1</td><td>Alfan Arligo DP</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>2</td><td>Adzka</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>3</td><td>Andini Aulia Putri</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>4</td><td>Anggita Aprilia</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>5</td><td>Aqila Izzatunnisa</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>6</td><td>Aqila Jellyta</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>7</td><td>Azril</td><td>Laki-laki</td><td>10</td><td>Sukabumi</td></tr>
+  <tr><td>8</td><td>Dawa Safwan</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>9</td><td>Dwi Serrirahayu</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>10</td><td>Fitri Nur Hidayah</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>11</td><td>Fatidha Nur Mala Rizki</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>12</td><td>Hilwa</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>13</td><td>Julian Gio Vani</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>14</td><td>Jihan Siti Najwa</td><td>Perempuan</td><td>10</td><td>Sukabumi</td></tr>
+  <tr><td>15</td><td>Lutfi Hasan</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>16</td><td>Muhammad Imran</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>17</td><td>Muhammad Abdul Hilmi Alhadi</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>18</td><td>Nisa Agustina Firmansyah</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>19</td><td>Naifa Anjani Sakhi Inara</td><td>Perempuan</td><td>10</td><td>Sukabumi</td></tr>
+  <tr><td>20</td><td>Nadia Khairun Anaya</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>21</td><td>Rifki Saputra</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>22</td><td>Ruhan Arsyii</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>23</td><td>Repan Assidik</td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>24</td><td>Sabila ?</td><td>Perempuan</td><td>10</td><td>Sukabumi</td></tr>
+  <tr><td>25</td><td>Shah Nizam</td><td>Laki-laki</td><td>10</td><td>Sukabumi</td></tr>
+  <tr><td>26</td><td>Silva Amalia</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>27</td><td>Siti Nabila</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>28</td><td>Sindi Aulia Putri</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>29</td><td>Tia Septiani Utami</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>30</td><td>Veronica Septiani Mariam</td><td>Perempuan</td><td>10</td><td>Sukabumi</td></tr>
+  <tr><td>31</td><td><b>Aufar Achmad Fauzi</b></td><td>Laki-laki</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>32</td><td>Elsa frozen</td><td>Perempuan</td><td>11</td><td>Sukabumi</td></tr>
+  <tr><td>33</td><td>Imelda Eliana</td><td>Perempuan</td><td>10</td><td>Sukabumi</td></tr>
+            
+
+        </table>
+    </div>
+
+    <div id="jadwal" class="konten">
+        <h1 class="reveal">Jadwal Pelajaran Class 5</h1>
+        <table class="reveal">
+            <caption>Semester Ganjil 2025</caption>
+            <tr>
+                <th>Hari</th>
+                <th>Jam</th>
+                <th>Mata Pelajaran</th>
+                <th>Guru</th>
+            </tr>
+            <tr> <td>Senin</td> <td>07.00 - 09.00 <br> 10.00 - 12.00</td> <td>Matematika dan B indo</td> <td>Bu Nia</td> </tr>
+            <tr> <td>Selasa</td> <td>07.00 - 09.00 <br> 11.30 - 12.00</td> <td>PAI dan IPAS</td> <td>Pak Ari</td> </tr>
+            <tr> <td>Rabu</td> <td>07.00 - 09.00 <br> 11.00 - 12.00</td> <td>B indo dan MTK</td> <td>Bu Nia</td> </tr>
+            <tr> <td>Kamis</td> <td>10.00 - 09.00 <br> 10.10 - 12.00</td> <td>PPKN dan MTK</td> <td>Bu Nia</td> </tr>
+            <tr> <td>Jumat</td> <td>07.00 - 09.00 <br> 10.30 - 11.20</td> <td>Olahraga B Inggris</td> <td>Pak Aldi</td> </tr>
+        </table>
+    </div>
+
+    <div id="struktur" class="konten">
+        <h1 class="reveal">Struktur Organisasi Kelas 5</h1>
+        <table class="reveal">
+            <caption>Periode 2025</caption>
+            <tr>
+                <th>Foto</th>
+                <th>Nama</th>
+                <th>Jabatan</th>
+            </tr>
+            <tr> <td><img src="foto_ketua_kelas.png" alt="Ketua Kelas"></td> <td>putra</td> <td>Ketua Kelas</td> </tr>
+            <tr> <td><img src="wakil_ketua.png" alt="Wakil Ketua"></td> <td>Anggita</td> <td>Wakil Ketua</td> </tr>
+            <tr> <td><img src="👈seketaris.png" alt="Sekretaris"></td> <td>Nisa</td> <td>Sekretaris</td> </tr>
+            <tr> <td><img src="seketaris_2.png" alt="Sekretaris"></td> <td>Naifa</td> <td>Sekretaris 2</td> </tr>
+            <tr> <td><img src="bendahara.png" alt="Bendahara"></td> <td>Silva</td> <td>Bendahara</td> </tr>
+            <tr> <td><img src="bendahara_2.png" alt="Bendahara"></td> <td>izzam</td> <td>Bendahara 2</td> </tr>
+            <tr> <td><img src="kebersihan.png" alt="Seksi Kebersihan"></td> <td>Salwa</td> <td>Seksi Kebersihan</td> </tr>
+            <tr> <td><img src="keamanan(aufar).jpg" alt="Seksi Keamanan"></td> <td>Aufar</td> <td>Seksi Keamanan</td> </tr>
+            <tr> <td><img src="gtw.png" alt="Seksi Pramuka"></td> <td>?</td> <td>Seksi Pramuka</td> </tr>
+        </table>
+    </div>
+
+    <div id="permainan" class="konten">
+        <h1>🎮 Daftar Permainan</h1>
+        <p>Pilih permainan seru di bawah ini!</p>
+        <button onclick="window.open('https://aufargabut-sigma.github.io/tebak-angka/gtw.html')">
+  Mainkan Game Tebak Angka
+</button>
+<button onclick="window.open('https://aufargabut-sigma.github.io/tic-ta-toe/tik_index.html')">
+  Mainkan Game Tic ta toe
+</button>
+
+        <button onclick="playSound()">Klik Aku Keluar Kentut Azka!</button>
+
+<audio id="klikSound" src="dry-fart.mp3"></audio>
+
+<script>
+  function playSound() {
+    document.getElementById("klikSound").play();
+  }
+</script>
+
+    </div>
+
+    <!-- HALAMAN FOTO -->
+  <div id="foto" class="konten">
+    <h1>Galeri Foto</h1>
+    <div class="galeri">
+      <img src="foto_kelas.png" alt="Foto 1" onclick="bukaFoto(this)">
+      <img src="aku fans barca.png" alt="Foto 2" onclick="bukaFoto(this)">
+      <img src="orang ganteng.png" alt="Foto 3" onclick="bukaFoto(this)">
+    </div>
+  </div>
+
+  <!-- POPUP -->
+  <div id="popup" class="popup" onclick="tutupFoto()">
+    <img src="" alt="Foto besar">
+  </div>
+
+  <script>
+    function buka(id) {
+      document.querySelectorAll('.konten').forEach(el => el.classList.remove('aktif'));
+      document.getElementById(id).classList.add('aktif');
+    }
+
+    function bukaFoto(gambar) {
+      const popup = document.getElementById('popup');
+      popup.querySelector('img').src = gambar.src;
+      popup.classList.add('active');
+    }
+
+    function tutupFoto() {
+      document.getElementById('popup').classList.remove('active');
+    }
+  </script>
+
+    <div id="tentang-kami" class="konten">
+        <h1 class="reveal">Tentang Kami</h1>
+
+         <h5>website ini dibuat oleh: aufar.</h5>
+        
+        <p style="font-size: 18px; padding: 0 30px; line-height: 1.6;">
+            Selamat datang di website Kelas 5 SDN Cibodas!
+            <br><br>
+            Kami adalah kelompok siswa yang ceria, kreatif, dan suka belajar. 
+            Website ini kami buat sebagai media informasi dan galeri kenangan 
+            kami selama di kelas 5.
+        </p>
+         <p>
+    Tujuan kami adalah menciptakan lingkungan belajar yang menyenangkan, kreatif, dan saling mendukung antar teman.
+  </p>
+  <h4>aufar berkata:</h4>
+  <P>makasih yang dah jadi temen gw walaupun kelakuannya agak lain ya, pesen dari gw jangan sering berantem mulu apalagi main jeger jegeran.</P>
+  <h5><b> love you all nyet :) </b> </h5>
+        
+        <div class="galeri">
+             <img src="foto_kelas.png" alt="Foto Kelas 5" onclick="bukaFoto(this)">
+             <img src="foto kelas2.png" alt="Foto Kelas 5 Lainnya" onclick="bukaFoto(this)">
+        </div>
+    </div>
+    <script>
+        // --- Fungsi Tab/Menu (dari file kedua) ---
+        function buka(id) {
+            // Sembunyikan semua konten
+            document.querySelectorAll('.konten').forEach(el => el.classList.remove('aktif'));
+            
+            // Tampilkan konten yang dipilih
+            document.getElementById(id).classList.add('aktif');
+
+            // Hapus dan jalankan ulang efek scroll saat tab baru dibuka
+            // Ini untuk memastikan animasi 'reveal' berjalan
+            window.removeEventListener("scroll", checkScroll);
+            checkScroll();
+            window.addEventListener("scroll", checkScroll);
+        }
+
+        // --- Fungsi Animasi Reveal (dari file pertama) ---
+        const reveals = document.querySelectorAll(".reveal");
+        const allRows = document.querySelectorAll("tr"); // Ambil semua baris di semua tabel
+
+        function checkScroll() {
+            let windowHeight = window.innerHeight;
+
+            // Animasi untuk h1, h2, dan tabel (.reveal)
+            reveals.forEach((el) => {
+                let top = el.getBoundingClientRect().top;
+                if (top < windowHeight - 100) {
+                    el.classList.add("show");
+                }
+            });
+
+            // Animasi untuk setiap baris (tr)
+            allRows.forEach((row, i) => {
+                // Pastikan baris berada di dalam konten yang aktif
+                const activeContent = row.closest('.konten.aktif');
+                if (activeContent) {
+                    let top = row.getBoundingClientRect().top;
+                    if (top < windowHeight - 53) {
+                        // Delay berdasarkan indeks baris
+                        setTimeout(() => row.classList.add("show-row"), i * 100); 
+                    }
+                }
+            });
+        }
+
+        // Atur tab default saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            // Tampilkan konten Data Siswa sebagai default
+            document.getElementById('data-siswa').classList.add('aktif');
+            
+            // Jalankan checkScroll untuk memicu animasi awal
+            checkScroll();
+            
+            // Tambahkan event listener scroll
+            window.addEventListener("scroll", checkScroll);
+        });
+    </script>
+</body>
+</html>
